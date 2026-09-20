@@ -1559,12 +1559,11 @@ class DocumentViewSet(
         path = None
         document_id = params.validated_data.get("document")
         if document_id:
-            try:
-                path = models.Document.objects.get(pk=document_id).values_list(
-                    "path", flat=True
-                )
-            except models.Document.DoesNotExist as exc:
-                raise drf.exceptions.NotFound("Document not found.") from exc
+            path = models.Document.objects.filter(pk=document_id).values_list(
+                "path", flat=True
+            ).first()
+            if path is None:
+                raise drf.exceptions.NotFound("Document not found.")
 
         results = indexer.search(
             q=params.validated_data["q"],
