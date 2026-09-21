@@ -257,8 +257,9 @@ class UserViewSet(
             queryset.annotate(
                 sim_email=TrigramSimilarity("email", query),
                 sim_name=TrigramSimilarity("full_name", query),
+                sim_handle=TrigramSimilarity("short_name", query),
             )
-            .annotate(similarity=Greatest("sim_email", "sim_name"))
+            .annotate(similarity=Greatest("sim_email", "sim_name", "sim_handle"))
             .filter(similarity__gt=0.2)
             .order_by("-similarity")
         )
