@@ -378,7 +378,12 @@ const QuickSearchInviteInputSection = ({
         isEmail && !hasEmailInUsers
           ? [
               {
-                content: <DocShareModalInviteUserRow user={newUser} showEmail={showEmail} />,
+                content: (
+                  <DocShareModalInviteUserRow
+                    user={newUser}
+                    showEmail={showEmail}
+                  />
+                ),
                 onSelect: () => void onSelect(newUser),
               },
             ]
@@ -394,7 +399,9 @@ const QuickSearchInviteInputSection = ({
       <QuickSearchGroup
         group={searchUserData}
         onSelect={onSelect}
-        renderElement={(user) => <DocShareModalInviteUserRow user={user} showEmail={showEmail} />}
+        renderElement={(user) => (
+          <DocShareModalInviteUserRow user={user} showEmail={showEmail} />
+        )}
       />
     </Box>
   );
