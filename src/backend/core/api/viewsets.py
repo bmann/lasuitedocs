@@ -210,13 +210,17 @@ class UserViewSet(
         if not document_id:
             return serializers.UserSearchSerializer
 
-        user = self.request.user
-        is_privileged = models.DocumentAccess.objects.filter(
-            db.Q(user=user) | db.Q(team__in=user.teams),
-            document_id=document_id,
-            role__in=choices.PRIVILEGED_ROLES,
-        ).exists()
-        return serializers.UserSerializer if is_privileged else serializers.UserSearchSerializer
+        try:
+            doc = models.Document.objects.get(pk=document_id)
+        except models.Document.DoesNotExist:
+            return serializers.UserSearchSerializer
+
+        role = doc.get_role(self.request.user)
+        return (
+            serializers.UserSerializer
+            if role in choices.PRIVILEGED_ROLES
+            else serializers.UserSearchSerializer
+        )
 
     def get_throttles(self):
         self.throttle_classes = []
