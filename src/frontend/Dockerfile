@@ -41,6 +41,10 @@ FROM impress AS impress-builder
 
 WORKDIR /home/frontend/apps/impress
 
+# BYOC tweak: cap node's heap so `next build` fits the 4 GiB Kimsufi guest
+# (was SIGKILLed by the OOM killer during page-data collection).
+ENV NODE_OPTIONS=--max-old-space-size=2304
+
 ARG API_ORIGIN
 ENV NEXT_PUBLIC_API_ORIGIN=${API_ORIGIN}
 
