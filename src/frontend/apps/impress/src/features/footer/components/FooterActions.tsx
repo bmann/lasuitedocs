@@ -4,7 +4,7 @@ import { createGlobalStyle } from 'styled-components';
 
 import { Box } from '@/components';
 import { Waffle } from '@/components/Waffle';
-import { ButtonLogin, gotoLogout, useAuth } from '@/features/auth';
+import { ButtonLogin, gotoLogout, useAuth, UserAvatar } from '@/features/auth';
 import { HelpMenu } from '@/features/help';
 import { LanguagePicker } from '@/features/language/components/LanguagePicker';
 
@@ -35,6 +35,9 @@ export const FooterActions = () => {
         className="--docs--footer-actions"
       >
         <Box $direction="row" $align="center" $gap="3xs">
+          {user?.avatar ? (
+            <UserAvatar fullName={user.full_name} avatarUrl={user.avatar} />
+          ) : null}
           <UserMenu
             user={userMenu}
             logout={user ? gotoLogout : undefined}
