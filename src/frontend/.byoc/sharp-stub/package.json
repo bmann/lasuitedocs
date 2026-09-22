@@ -1,0 +1,6 @@
+{
+  "name": "sharp",
+  "version": "0.35.4",
+  "description": "BYOC build-time stub — see https://sharp.pixelplumbing.com/install#building-from-source",
+  "main": "index.cjs"
+}
