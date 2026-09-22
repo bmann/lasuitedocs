@@ -7,6 +7,13 @@ RUN apk update && \
   apk upgrade && \
   rm -rf /var/cache/apk/*
 
+# BYOC tweak: the prebuilt @img/sharp-linuxmusl-x64 binaries require x64-v2
+# (AVX2) microarchitecture, which the OVH Kimsufi box's CPU predates — compile
+# sharp's native binding from source instead (libvips comes from the prebuilt
+# musl tarball). Needs g++/make/python3/curl for node-gyp + the installer.
+RUN apk add --no-cache g++ make python3 curl
+ENV npm_config_build_from_source=true
+
 WORKDIR /home/frontend/
 
 COPY ./src/frontend/package.json ./package.json
