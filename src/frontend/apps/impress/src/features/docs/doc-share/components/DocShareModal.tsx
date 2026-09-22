@@ -302,6 +302,7 @@ export const DocShareModal = ({ doc, onClose, isRootDoc = true }: Props) => {
                       onSelect={onSelect}
                       userQuery={userQuery}
                       minLength={API_USERS_SEARCH_QUERY_MIN_LENGTH}
+                      showEmail={doc.abilities.accesses_manage}
                     />
                   )}
                 </QuickSearch>
@@ -323,6 +324,7 @@ interface QuickSearchInviteInputSectionProps {
   searchUsersRawData: User[] | undefined;
   userQuery: string;
   minLength: number;
+  showEmail?: boolean;
 }
 
 const QuickSearchInviteInputSection = ({
@@ -330,6 +332,7 @@ const QuickSearchInviteInputSection = ({
   searchUsersRawData,
   userQuery,
   minLength,
+  showEmail = false,
 }: QuickSearchInviteInputSectionProps) => {
   const { t } = useTranslation();
   const hint = useMemo(() => {
@@ -375,13 +378,13 @@ const QuickSearchInviteInputSection = ({
         isEmail && !hasEmailInUsers
           ? [
               {
-                content: <DocShareModalInviteUserRow user={newUser} />,
+                content: <DocShareModalInviteUserRow user={newUser} showEmail={showEmail} />,
                 onSelect: () => void onSelect(newUser),
               },
             ]
           : undefined,
     };
-  }, [searchUsersRawData, userQuery, hint, onSelect]);
+  }, [searchUsersRawData, userQuery, hint, onSelect, showEmail]);
 
   return (
     <Box
@@ -391,7 +394,7 @@ const QuickSearchInviteInputSection = ({
       <QuickSearchGroup
         group={searchUserData}
         onSelect={onSelect}
-        renderElement={(user) => <DocShareModalInviteUserRow user={user} />}
+        renderElement={(user) => <DocShareModalInviteUserRow user={user} showEmail={showEmail} />}
       />
     </Box>
   );

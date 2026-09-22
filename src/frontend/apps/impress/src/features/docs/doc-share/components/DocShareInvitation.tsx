@@ -73,6 +73,7 @@ export const DocShareInvitationItem = ({
     >
       <SearchUserRow
         isInvitation={true}
+        showHandle={false}
         alwaysShowRight={true}
         user={invitedUser}
         right={
@@ -96,9 +97,11 @@ export const DocShareInvitationItem = ({
 
 type DocShareModalInviteUserRowProps = {
   user: User;
+  showEmail?: boolean;
 };
 export const DocShareModalInviteUserRow = ({
   user,
+  showEmail = false,
 }: DocShareModalInviteUserRowProps) => {
   const { t } = useTranslation();
   return (
@@ -109,6 +112,7 @@ export const DocShareModalInviteUserRow = ({
     >
       <SearchUserRow
         user={user}
+        showEmail={showEmail}
         right={
           <BoxButton
             className="right-hover"

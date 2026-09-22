@@ -13,6 +13,10 @@ type Props = {
   alwaysShowRight?: boolean;
   right?: QuickSearchItemContentProps['right'];
   isInvitation?: boolean;
+  /** Show the @handle line (hidden for invitations, which have no handle yet). */
+  showHandle?: boolean;
+  /** Show the email on a third line — only for users allowed to manage accesses. */
+  showEmail?: boolean;
 };
 
 export const SearchUserRow = ({
@@ -20,9 +24,15 @@ export const SearchUserRow = ({
   right,
   alwaysShowRight = false,
   isInvitation = false,
+  showHandle = true,
+  showEmail = false,
 }: Props) => {
-  const hasFullName = !!user.full_name;
   const { spacingsTokens, colorsTokens } = useCunninghamTheme();
+  const { full_name, short_name, email } = user;
+  // Invitations are emails by definition (no account yet): short_name == email.
+  const hasHandle = showHandle && !!short_name && short_name !== email;
+  const displayHandle = hasHandle ? `@${short_name}` : '';
+  const displayMain = full_name || displayHandle || email;
 
   return (
     <QuickSearchItemContent
@@ -36,7 +46,7 @@ export const SearchUserRow = ({
           className="--docs--search-user-row"
         >
           <UserAvatar
-            fullName={user.full_name || user.email}
+            fullName={full_name || email}
             background={isInvitation ? colorsTokens['gray-400'] : undefined}
           />
           <Box $direction="column">
@@ -47,9 +57,9 @@ export const SearchUserRow = ({
                 line-break: anywhere;
               `}
             >
-              {hasFullName ? user.full_name : user.email}
+              {displayMain}
             </Text>
-            {hasFullName && (
+            {hasHandle && (
               <Text
                 $size="xs"
                 $margin={{ top: '-2px' }}
@@ -58,7 +68,19 @@ export const SearchUserRow = ({
                   line-break: anywhere;
                 `}
               >
-                {user.email}
+                {displayHandle}
+              </Text>
+            )}
+            {showEmail && email && (
+              <Text
+                $size="xs"
+                $margin={{ top: '-2px' }}
+                $variation="secondary"
+                $css={css`
+                  line-break: anywhere;
+                `}
+              >
+                {email}
               </Text>
             )}
           </Box>

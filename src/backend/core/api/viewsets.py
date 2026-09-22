@@ -194,6 +194,30 @@ class UserViewSet(
     pagination_class = None
     throttle_classes = []
 
+    def get_serializer_class(self):
+        """Hide emails in search results unless the requester is owner/admin on the target doc.
+
+        The share picker's `users/` search is available to any authenticated user, so
+        results carry only identity fields (id/full_name/short_name) by default. When a
+        `document_id` is provided and the requester holds an owner or admin role on that
+        document, the full serializer (with email) is used — matching how the document
+        access list is serialized (OVHP-121 follow-up).
+        """
+        if self.action != "list":
+            return super().get_serializer_class()
+
+        document_id = self.request.query_params.get("document_id", "")
+        if not document_id:
+            return serializers.UserSearchSerializer
+
+        user = self.request.user
+        is_privileged = models.DocumentAccess.objects.filter(
+            db.Q(user=user) | db.Q(team__in=user.teams),
+            document_id=document_id,
+            role__in=choices.PRIVILEGED_ROLES,
+        ).exists()
+        return serializers.UserSerializer if is_privileged else serializers.UserSearchSerializer
+
     def get_throttles(self):
         self.throttle_classes = []
         if self.action == "list":

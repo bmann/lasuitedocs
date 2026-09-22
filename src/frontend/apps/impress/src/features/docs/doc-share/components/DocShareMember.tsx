@@ -65,6 +65,7 @@ export const DocShareMemberItem = ({
       <SearchUserRow
         alwaysShowRight={true}
         user={access.user}
+        showEmail={!!doc?.abilities?.accesses_manage}
         right={
           <Box $direction="row" $align="center" $gap={spacingsTokens['2xs']}>
             <DocRoleDropdown

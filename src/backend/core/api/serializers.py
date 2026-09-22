@@ -77,6 +77,21 @@ class UserLightSerializer(UserSerializer):
         read_only_fields = ["full_name", "short_name"]
 
 
+class UserSearchSerializer(UserSerializer):
+    """Serialize users in search results — identity fields only.
+
+    Email is intentionally excluded here: search results are exposed to any
+    authenticated user within the proximity rules, so emails are only added
+    back for requesters holding an owner/admin role on the target document
+    (see UserViewSet.get_serializer_class).
+    """
+
+    class Meta:
+        model = models.User
+        fields = ["id", "full_name", "short_name", "language", "is_first_connection"]
+        read_only_fields = ["id", "full_name", "short_name", "language", "is_first_connection"]
+
+
 class ListDocumentSerializer(serializers.ModelSerializer):
     """Serialize documents with limited fields for display in lists."""
 
