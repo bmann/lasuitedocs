@@ -13,6 +13,8 @@ export interface User {
   full_name: string;
   short_name: string;
   language?: string;
+  /** Avatar URL from the AIP OIDC `picture` claim (public AIP-hosted URL). */
+  avatar?: string;
 }
 
 export type UserLight = Pick<User, 'full_name' | 'short_name'>;

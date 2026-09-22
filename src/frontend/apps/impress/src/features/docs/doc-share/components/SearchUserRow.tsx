@@ -48,6 +48,7 @@ export const SearchUserRow = ({
           <UserAvatar
             fullName={full_name || email}
             background={isInvitation ? colorsTokens['gray-400'] : undefined}
+            avatarUrl={user.avatar}
           />
           <Box $direction="column">
             <Text

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { tokens } from '@/cunningham';
@@ -32,10 +33,35 @@ const getInitialFromName = (name: string) => {
 type UserAvatarProps = {
   fullName?: string;
   background?: string;
+  /** Optional avatar image URL (from the OIDC `picture` claim). */
+  avatarUrl?: string;
 };
 
-export const UserAvatar = ({ fullName, background }: UserAvatarProps) => {
+export const UserAvatar = ({
+  fullName,
+  background,
+  avatarUrl,
+}: UserAvatarProps) => {
   const name = fullName?.trim() || '?';
+  const [avatarFailed, setAvatarFailed] = useState(false);
+
+  if (avatarUrl && !avatarFailed) {
+    return (
+      <img
+        className="--docs--user-avatar"
+        src={avatarUrl}
+        alt=""
+        aria-hidden="true"
+        style={{
+          width: 24,
+          height: 24,
+          borderRadius: '50%',
+          objectFit: 'cover',
+        }}
+        onError={() => setAvatarFailed(true)}
+      />
+    );
+  }
 
   return (
     <AvatarSvg

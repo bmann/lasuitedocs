@@ -54,6 +54,10 @@ class OIDCAuthenticationBackend(LaSuiteOIDCAuthenticationBackend):
         return {
             "full_name": self.compute_full_name(user_info),
             "short_name": user_info.get(settings.OIDC_USERINFO_SHORTNAME_FIELD),
+            # AIP mirrors the atproto profile avatar and emits it as the standard
+            # OIDC `picture` claim (public URL) — stored for the share picker,
+            # comments and the editor user avatar.
+            "avatar": user_info.get("picture"),
         }
 
     def get_existing_user(self, sub, email):

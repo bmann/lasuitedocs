@@ -165,9 +165,17 @@ export const BlockNoteEditor = ({ doc, provider }: BlockNoteEditorProps) => {
 
   const currentUserAvatarUrl = useMemo(() => {
     if (canSeeComment) {
-      return avatarUrlFromName(collabName, themeTokens?.font?.families?.base);
+      return (
+        user?.avatar ||
+        avatarUrlFromName(collabName, themeTokens?.font?.families?.base)
+      );
     }
-  }, [canSeeComment, collabName, themeTokens?.font?.families?.base]);
+  }, [
+    canSeeComment,
+    collabName,
+    themeTokens?.font?.families?.base,
+    user?.avatar,
+  ]);
 
   const editor: DocsBlockNoteEditor = useCreateBlockNote(
     withCollaboration({

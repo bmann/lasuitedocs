@@ -42,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
             "short_name",
             "language",
             "is_first_connection",
+            "avatar",
         ]
         read_only_fields = [
             "id",
@@ -88,8 +89,8 @@ class UserSearchSerializer(UserSerializer):
 
     class Meta:
         model = models.User
-        fields = ["id", "full_name", "short_name", "language", "is_first_connection"]
-        read_only_fields = ["id", "full_name", "short_name", "language", "is_first_connection"]
+        fields = ["id", "full_name", "short_name", "language", "is_first_connection", "avatar"]
+        read_only_fields = ["id", "full_name", "short_name", "language", "is_first_connection", "avatar"]
 
 
 class ListDocumentSerializer(serializers.ModelSerializer):
